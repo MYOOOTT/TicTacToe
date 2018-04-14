@@ -3,6 +3,7 @@ public class Board {
     private boolean winner;
     private Square[][] gameBoard;
     boolean firstPlayerTurn;
+    char winningPlayer;
 
     public Board() {
         firstPlayerTurn = true;
@@ -27,7 +28,7 @@ public class Board {
     }
 
     boolean checkWinner() {
-        return checkRows() || checkColumns();
+        return checkRows() || checkColumns() || checkDiagonals();
     }
 
     boolean checkRows() {
@@ -41,27 +42,71 @@ public class Board {
                 if (gameBoard[row][column].getSpace() == winChar)
                     winCounter++;
             }
-            if (winCounter == 3)
+            if (winCounter == 3) {
                 rowWinner = true;
+                winningPlayer = winChar;
+            }
         }
         return rowWinner;
     }
 
     boolean checkColumns() {
-        boolean rowWinner = false;
+        boolean columnWinner = false;
         for (int column = 0; column < 3; column++) {
             int winCounter = 0;
             char winChar = gameBoard[0][column].getSpace();
             for (int row = 0; row < 3; row++){
-                if (winChar == ' ') // go to next column if first space is space
+                if (winChar == ' ') // go to next column if first space is nothing
                     break;
                 if (gameBoard[row][column].getSpace() == winChar)
                     winCounter++;
             }
-            if (winCounter == 3)
-                rowWinner = true;
+            if (winCounter == 3) {
+                columnWinner = true;
+                winningPlayer = winChar;
+            }
         }
-        return rowWinner;
+        return columnWinner;
+    }
+
+    boolean checkDiagonals() {
+        boolean diagonalWinner = false;
+        int winCounter = 0;
+        for (int row = 0; row < 3; row++){ //checking diagonal line topleft > bottomright
+
+            char winChar = gameBoard[0][0].getSpace();
+            if(winChar == ' ')
+                break;
+
+            if(gameBoard[row][row].getSpace() == winChar)
+                winCounter++;
+
+            if (winCounter == 3) {
+                winningPlayer = winChar;
+                return true;
+            }
+        }
+
+        winCounter = 0;
+
+        if (diagonalWinner == false) {//if the first pass comes up with nothing
+            int column = 0;
+            for (int row = 2; row > -1; row--){ //checking diagonal line bottomleft > topright
+                char winChar = gameBoard[2][0].getSpace();
+                if(winChar == ' ')
+                    break;
+
+                if(gameBoard[row][column].getSpace() == winChar)
+                    winCounter++;
+                column++;
+
+                if (winCounter == 3)
+                    winningPlayer = winChar;
+                    return true;
+
+            }
+        }
+        return false;
     }
 
     void turn(int index) {
@@ -83,9 +128,12 @@ public class Board {
         }
     }
 
-        char getTile (int row, int column){
-            return gameBoard[row][column].getSpace();
-        }
+    char getTile (int row, int column){
+        return gameBoard[row][column].getSpace();
+    }
 
+    char getWinChar() {
+        return winningPlayer;
+    }
 
 }

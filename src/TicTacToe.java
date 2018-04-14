@@ -12,5 +12,8 @@ public class TicTacToe {
             int intendedSpace = oof.askUser();
             game.turn(intendedSpace);
         }
+
+        System.out.println("The winner is " + game.getWinChar() + "!");
+        game.displayBoard();
     }
 }
