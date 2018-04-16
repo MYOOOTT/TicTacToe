@@ -5,7 +5,7 @@ public class TicTacToe {
 
         Board game = new Board();
         Scanner scan = new Scanner(System.in);
-        UserInteraction oof = new UserInteraction(scan);
+        UserInteraction oof = new UserInteraction(scan, game);
 
         while(game.checkWinner() == false) {
             game.displayBoard();

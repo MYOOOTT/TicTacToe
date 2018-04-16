@@ -2,11 +2,11 @@
 public class Board {
     private boolean winner;
     private Square[][] gameBoard;
-    boolean firstPlayerTurn;
+    boolean isX;
     char winningPlayer;
 
     public Board() {
-        firstPlayerTurn = true;
+        isX = true;
         winner = false;
         gameBoard = new Square[3][3];
         for(int i = 0; i < 3; i++) {
@@ -18,9 +18,10 @@ public class Board {
 
     void displayBoard() {
         for(int i = 0; i < 3; i++) {
+            System.out.print("| ");
             for(int j = 0; j < 3; j++) {
                 char space = gameBoard[i][j].getSpace();
-                System.out.print(space + " " + "| ");
+                System.out.print(space + " |");
             }
             System.out.println();
         }
@@ -110,20 +111,19 @@ public class Board {
     }
 
     void turn(int index) {
+        System.out.println();
         int row = index / 3;
         int column = index % 3;
         char existingSpace = getTile(row, column);
-        System.out.println("row:" + row);
-        System.out.println("column:" + column);
         if (existingSpace == 'X' || existingSpace == 'O') {
             System.out.println("Sorry, existing space already! Try again.");
         } else {
-            if (firstPlayerTurn) {
+            if (isX) {
                 gameBoard[row][column].changeState(1);
-                firstPlayerTurn = !firstPlayerTurn;
+                isX = !isX;
             } else {
                 gameBoard[row][column].changeState(-1);
-                firstPlayerTurn = !firstPlayerTurn;
+                isX = !isX;
             }
         }
     }
@@ -134,6 +134,10 @@ public class Board {
 
     char getWinChar() {
         return winningPlayer;
+    }
+
+    boolean getIsX(){
+        return isX;
     }
 
 }
