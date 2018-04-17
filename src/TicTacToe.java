@@ -7,13 +7,12 @@ public class TicTacToe {
         Scanner scan = new Scanner(System.in);
         UserInteraction oof = new UserInteraction(scan, game);
 
-        while(game.checkWinner() == false) {
+        while(game.checkWinner() == false && game.checkFull() == false) {
             game.displayBoard();
             int intendedSpace = oof.askUser();
             game.turn(intendedSpace);
         }
 
-        System.out.println("The winner is " + game.getWinChar() + "!");
         game.displayBoard();
     }
 }

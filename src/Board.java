@@ -1,13 +1,11 @@
 
 public class Board {
-    private boolean winner;
     private Square[][] gameBoard;
     boolean isX;
     char winningPlayer;
 
     public Board() {
         isX = true;
-        winner = false;
         gameBoard = new Square[3][3];
         for(int i = 0; i < 3; i++) {
             for(int j = 0; j < 3; j++) {
@@ -29,7 +27,7 @@ public class Board {
     }
 
     boolean checkWinner() {
-        return checkRows() || checkColumns() || checkDiagonals();
+        return checkRows() || checkColumns() || checkTopLeftDiagonal() || checkBottomLeftDiagonal();
     }
 
     boolean checkRows() {
@@ -40,12 +38,14 @@ public class Board {
             for (int column = 0; column < 3; column++){
                 if (winChar == ' ') // go to next row if first space is space
                     break;
+
                 if (gameBoard[row][column].getSpace() == winChar)
                     winCounter++;
             }
             if (winCounter == 3) {
                 rowWinner = true;
                 winningPlayer = winChar;
+                System.out.println("The winner is " + getWinChar() + "!");
             }
         }
         return rowWinner;
@@ -65,50 +65,55 @@ public class Board {
             if (winCounter == 3) {
                 columnWinner = true;
                 winningPlayer = winChar;
+                System.out.println("The winner is " + getWinChar() + "!");
             }
         }
         return columnWinner;
     }
 
-    boolean checkDiagonals() {
-        boolean diagonalWinner = false;
+    boolean checkTopLeftDiagonal() {
         int winCounter = 0;
-        for (int row = 0; row < 3; row++){ //checking diagonal line topleft > bottomright
+        char winChar = gameBoard[0][0].getSpace();
+        for (int row = 0; row < 3; row++) { //checking diagonal line topleft > bottomright
 
-            char winChar = gameBoard[0][0].getSpace();
-            if(winChar == ' ')
+            if (winChar == ' ')
                 break;
 
-            if(gameBoard[row][row].getSpace() == winChar)
+            if (gameBoard[row][row].getSpace() == winChar)
                 winCounter++;
 
-            if (winCounter == 3) {
+            if(winCounter == 3) {
                 winningPlayer = winChar;
+                System.out.println("The winner is " + getWinChar() + "!");
                 return true;
             }
+
+            }
+            return false;
         }
 
-        winCounter = 0;
-
-        if (diagonalWinner == false) {//if the first pass comes up with nothing
-            int column = 0;
-            for (int row = 2; row > -1; row--){ //checking diagonal line bottomleft > topright
-                char winChar = gameBoard[2][0].getSpace();
+    boolean checkBottomLeftDiagonal() {
+        int winCounter = 0;
+        int column = 0;
+        char winChar = gameBoard[2][0].getSpace();
+        for (int row = 2; row > -1; row--){ //checking diagonal line bottomleft > topright
                 if(winChar == ' ')
                     break;
 
                 if(gameBoard[row][column].getSpace() == winChar)
                     winCounter++;
+
                 column++;
 
-                if (winCounter == 3)
+                if (winCounter == 3) {
                     winningPlayer = winChar;
+                    System.out.println("The winner is " + getWinChar() + "!");
                     return true;
+                }
 
             }
-        }
         return false;
-    }
+        }
 
     void turn(int index) {
         System.out.println();
@@ -140,4 +145,19 @@ public class Board {
         return isX;
     }
 
+    boolean checkFull() {
+        int occupied = 0;
+        for (int row = 0; row < 3; row++) {
+            for (int column = 0; column < 3; column++) {
+                if (gameBoard[row][column].getSpace() != ' ')
+                    occupied++;
+            }
+        }
+        if(occupied == 9) {
+            System.out.println("Cat's game! No one wins.");
+            return true;
+        } else {
+            return false;
+        }
+    }
 }
